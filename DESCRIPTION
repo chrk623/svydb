@@ -1,0 +1,20 @@
+Package: svydb
+Type: Package
+Title:
+Version: 0.1.0
+Author: Charco Hui
+Maintainer: 
+Description: Survey statistics in a database.
+License: 
+Encoding: UTF-8
+LazyData: true
+URL: http:
+Imports:
+        R6,
+     dplyr,
+    dbplyr,
+     rlang,
+    survey
+Suggests:
+          DBI,
+  MonetDBLite
