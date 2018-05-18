@@ -114,6 +114,32 @@ makesvydbdesign <- R6Class("svydb.design",
                            )
 )
 
+#' Survey design
+#'
+#' @param st Column name specifying the strata column. \code{NULL} for no strata.
+#' @param id Column name specifying the cluster column. \code{NULL} for no cluster.
+#' @param wt Column name specifying the sampling weights column.
+#' @param data A data frame or sql table of the survey data set..
+#' @description
+#' Gathers all information that are needed to compute survey statistics
+#' into a design.
+#' @examples
+#' data(nhane)
+#' nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
+#' nh.dbsurv$subset(Race3 == 3)
+#' nh.dbsurv$getmh()
+#' nh.dbsurv$clone()
+#' # OR with a database connection
+#' # require(MonetDBLite)
+#' # require(DBI)
+#' # require(dbplyr)
+#' # con = dbConnect(MonetDBLite())
+#' # dbWriteTable(con, "nhane", nhane)
+#' # nhane.db = tbl(con, "nhane")
+#' @author Charco Hui
+#' @seealso
+#' \code{\link{svydbtotal}}, \code{\link{svydbmean}}
+#'
 svydbdesign = function(st = NULL, id = NULL, wt = NULL, data){
   st = enquo(st)
   id = enquo(id)

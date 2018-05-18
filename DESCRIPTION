@@ -11,7 +11,9 @@ LazyData: FALSE
 Depends: R6,
     dplyr,
     rlang,
-    survey
+    survey,
+    ggplot2
 Suggests: DBI,
     MonetDBLite,
     dbplyr
+RoxygenNote: 6.0.1
