@@ -110,7 +110,34 @@ makesvydbrepdesign <- R6Class("svydb.repdesign",
                                 }
                               )
 )
+#' Survey replicate design
+#'
+#' @param st Column name specifying the strata column. \code{NULL} for no strata.
+#' @param id Column name specifying the cluster column. \code{NULL} for no cluster.
+#' @param wt Column name specifying the sampling weights column.
+#' @param repwt Regular expressions that matches the columns of the replicate weights.
+#' @param scale Scaling constant for variance.
+#' @param data A data frame or sql table of the survey data set.
+#' @description
+#' Gathers all information that are needed to compute survey statistics
+#' into a design. Currently, only \code{\link{svydbreptotal}}, \code{\link{svydbrepmean}},
+#' are available for replicate statistics.
+#' @examples
+#' data(ss16hde)
+#' hde.dbrepsurv = svydbrepdesign(wt = WGTP, repwt="wgtp[0-9]+", scale = 4/80, data = ss16hde)
+#' hde.dbrepsurv$subset(BATH == 1)
+#' hde.dbrepsurv$clone()
+#' # OR with a database connection
+#' # require(MonetDBLite)
+#' # require(DBI)
+#' # require(dbplyr)
+#' # con = dbConnect(MonetDBLite())
+#' # dbWriteTable(con, "ss16hde", ss16hde)
+#' # ss16hde.db = tbl(con, "ss16hde")
+#' # hde.dbrepsurv = svydbrepdesign(wt = WGTP, repwt="wgtp[0-9]+", scale = 4/80, data = ss16hde.db)
+#' @author Charco Hui
 
+#'
 svydbrepdesign = function(st = NULL, id = NULL, wt = NULL, repwt = NULL, scale, data){
   st = enquo(st)
   id = enquo(id)

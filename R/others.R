@@ -25,7 +25,7 @@ db_nrow = function(data) {
 db_dim = function(data) {
     n_rows = data %>% ungroup() %>% count() %>% pull()
     n_cols = ncol(data)
-    
+
     out = c(n_rows, n_cols)
     names(out) = c("rows", "cols")
     out
@@ -46,12 +46,14 @@ db_rowSums_mut = function(data, vars = NULL, newRowName = "rSum") {
         s = paste(vars, collapse = " + ")
     }
     q = quote(mutate(data, rSum = s))
-    
+
     eval(parse(text = sub("rSum", newRowName, sub("s", s, deparse(q)))))
 }
 
-db_rowSums = function(data) {
-    db_rowSums_mut(data) %>% select(rSum)
+db_rowSums = function(data){
+  cn = colnames(data)
+  rs = paste(cn, collapse = " + ")
+  data %>% transmute(rowsum = !!parse_expr(rs))
 }
 
 db_cbind = function(x, y) {
@@ -72,7 +74,7 @@ dummy_mut = function(data, by, withBase = T, return.level = F) {
     level = as.character(dum[, 1])
     cs = contrasts(as.factor(dum[, 1]))
     by_name = colnames(dum)
-    
+
     if (withBase == T) {
         c1 = c(1, rep(0, nrow(dum) - 1))
         dum = cbind(dum, c1, contrasts(as.factor(dum[, 1])))
@@ -83,13 +85,13 @@ dummy_mut = function(data, by, withBase = T, return.level = F) {
         name = paste(colnames(dum)[1], as.character(dum[, 1])[-1], sep = "_")
         colnames(dum) = c(colnames(dum)[1], name)
     }
-    
+
     dum = inner_join(data, dum, by = by_name, copy = T)
-    
+
     if (withBase == F) {
         dum = dum %>% select(-!!by)
     }
-    
+
     if (return.level == T) {
         dum = list(dum = dum, levels = level)
         return(dum)
@@ -107,11 +109,11 @@ db_cut = function(var, breaks, data) {
     temp_exprs = paste("ifelse(vars", "<= ", breaks, ",", trues, ", _f_)")
     temp_exprs[length(breaks)] = gsub(pattern = "[_]f[_]", replacement = "NA", x = temp_exprs[length(breaks)])
     mut_exprs = temp_exprs[1]
-    
+
     for (i in 2:length(breaks)) {
         mut_exprs = gsub(pattern = "[_]f[_]", replacement = temp_exprs[i], x = mut_exprs)
     }
-    
+
     mut_exprs = parse_expr(mut_exprs)
     data = data %>% mutate(`_cuts_` = !!mut_exprs) %>% rename(`:=`(!!sym(var_name), vars)) %>% rename(cuts = `_cuts_`)
     data
@@ -120,13 +122,13 @@ db_cut = function(var, breaks, data) {
 db_cut2 = function(var, breaks, right = TRUE, data) {
     var = enquo(var)
     mult = diff(breaks)[1]
-    
+
     if (right == TRUE) {
         data = data %>% mutate(cut = ((!!quo(mult)) * ceiling((!!var)/(!!quo(mult)))) - (!!quo(mult)))
     } else {
         data = data %>% mutate(cut = ((!!quo(mult)) * floor((!!var)/(!!quo(mult)))))
     }
-    
+
     return(data)
 }
 
@@ -139,7 +141,7 @@ svydbVar2 = function(x, xleft = 1, xright = 2, st, m_h, data) {
     m = m %>% select(-m_h)
     m = m %>% mutate(ztz = xleft * xright) %>% group_by(st) %>% summarise(ztz = sum(ztz))
     m = left_join(m, m_h, by = "st")
-    m = m %>% mutate(scaled = ztz * (m_h/(m_h - 1))) %>% select(scaled) %>% summarise(sum(scaled)) %>% compute(temporary = T) %>% 
+    m = m %>% mutate(scaled = ztz * (m_h/(m_h - 1))) %>% select(scaled) %>% summarise(sum(scaled)) %>% compute(temporary = T) %>%
         pull()
     return(m)
 }
@@ -150,7 +152,7 @@ svydbVar = function(x, st, m_h, data) {
     m = m %>% select(-m_h)
     m = m %>% mutate(ztz = x * x) %>% group_by(st) %>% summarise(ztz = sum(ztz))
     m = left_join(m, m_h, by = "st")
-    m = m %>% mutate(scaled = ztz * (m_h/(m_h - 1))) %>% select(scaled) %>% summarise(sum(scaled)) %>% compute(temporary = T) %>% 
+    m = m %>% mutate(scaled = ztz * (m_h/(m_h - 1))) %>% select(scaled) %>% summarise(sum(scaled)) %>% compute(temporary = T) %>%
         pull()
     return(m)
 }
@@ -190,14 +192,15 @@ SE.svydbstat = function(x, ...) {
     return(s)
 }
 
-print.svydbrepstat = function(xx, ...) {
-    if (is.list(xx)) {
-        xx = xx$svydbrepstat
-    }
-    v <- attr(xx, "var")
-    m = cbind(xx, sqrt(v))
-    colnames(m) = c(attr(xx, "statistic"), "SE")
-    printCoefmat(m)
+print.svydbrepstat =  function (xx, ...){
+  if(is.list(xx)){
+    xx = xx$svydbrepstat
+  }
+  v <- attr(xx, "var")
+  m = cbind(xx, sqrt(v))
+  colnames(m) = c(attr(xx, "statistic"), "SE")
+  rownames(m) = attr(xx, "name")
+  printCoefmat(m)
 }
 
 coef.svydbrepstat = function(object, ...) {
@@ -243,12 +246,12 @@ summary.svydblm = function(object) {
     pvalue <- 2 * pt(-abs(tvalue), df.r)
     coef.table <- rbind(coef.p, t(as.matrix(s.err)), tvalue, pvalue) %>% t()
     dimnames(coef.table) <- list(colnames(coef.p), c(dn, "t value", "Pr(>|t|)"))
-    ans = list(df.residual = df.r, coefficients = coef.table, cov.unscaled = covmat, cov.scaled = covmat, call = object$call, 
+    ans = list(df.residual = df.r, coefficients = coef.table, cov.unscaled = covmat, cov.scaled = covmat, call = object$call,
         design = object$design)
     class(ans) <- c("summary.svydblm", "summary.glm")
     return(ans)
 }
-print.summary.svydblm = function(x, digits = max(3, getOption("digits") - 3), signif.stars = getOption("show.signif.stars"), 
+print.summary.svydblm = function(x, digits = max(3, getOption("digits") - 3), signif.stars = getOption("show.signif.stars"),
     ...) {
     cat("\nCall:\n")
     cat(paste(deparse(x$call), sep = "\n", collapse = "\n"), "\n\n", sep = "")
