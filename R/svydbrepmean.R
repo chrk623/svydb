@@ -77,7 +77,7 @@ svydbrepmean = function(x, design, num, return.replicates = F){
 
   means = fullMeanTbl %>% t() %>% as.vector()
   attr(means, "var") = repVar
-  attr(means, "statistic") <- "Total"
+  attr(means, "statistic") <- "Mean"
   attr(means, "name") = dsn$names$x
 
   if(return.replicates == T){
