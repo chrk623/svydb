@@ -56,7 +56,8 @@ svydbreptotal = function(x, design, num, return.replicates = F){
 
   cnt = 1
   getRepTots = function(names, fullTot){
-    replicates = d %>% summarise_at(vars(dsn$repwt), funs(sum((. * !!sym(names)))))
+    replicates = d %>% summarise_at(vars(dsn$repwt), funs(sum((. * !!sym(names))))) %>%
+      collect()
     repTot = replicates %>%
       summarise_all(funs((. - !!quo(fullTot[cnt]))^2))
     cnt <<- cnt + 1

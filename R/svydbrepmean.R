@@ -57,7 +57,8 @@ svydbrepmean = function(x, design, num, return.replicates = F){
 
   cnt = 1
   getRepTots = function(names, fullMean){
-    replicates = d %>% summarise_at(vars(dsn$repwt), funs(sum((. * !!sym(names)))/!!quo(N)))
+    replicates = d %>% mutate_at(vars(dsn$repwt), funs((. * !!sym(names))/!!quo(N))) %>%
+      summarise_at(vars(dsn$repwt), funs(sum(.)))
     repMean = replicates %>%
       summarise_all(funs((. - !!quo(fullMean[cnt]))^2))
     cnt <<- cnt + 1
@@ -87,3 +88,4 @@ svydbrepmean = function(x, design, num, return.replicates = F){
   class(means) = c("svydbrepstat")
   return(means)
 }
+
