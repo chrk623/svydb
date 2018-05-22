@@ -282,3 +282,4 @@ predict.svydblm = function(object, newdata = NULL, ...) {
 vcov.svydblm = function(x, ...) {
     x$cov.unscaled
 }
+

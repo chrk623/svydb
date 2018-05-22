@@ -90,4 +90,3 @@ svydbrepmean = function(x, design, num, return.replicates = F){
   class(means) = c("svydbrepstat")
   return(means)
 }
-
