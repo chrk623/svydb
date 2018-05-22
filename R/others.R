@@ -52,7 +52,7 @@ db_rowSums_mut = function(data, vars = NULL, newRowName = "rSum") {
 
 db_rowSums = function(data){
   cn = colnames(data)
-  rs = paste(cn, collapse = " + ")
+  rs = paste("`", cn, "`", sep = "", collapse = " + ")
   data %>% transmute(rowsum = !!parse_expr(rs))
 }
 

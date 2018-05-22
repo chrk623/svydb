@@ -55,10 +55,13 @@ svydbrepmean = function(x, design, num, return.replicates = F){
                                    funs(sum(. * (!!sym(dsn$wt)))/!!quo(N))) %>%
     collect()
 
+  repN = d %>% select(dsn$repwt) %>% summarise_all(sum) %>% collect()
+  repN = paste(colnames(repN), "/", repN, collapse = " ; ")
   cnt = 1
   getRepTots = function(names, fullMean){
-    replicates = d %>% mutate_at(vars(dsn$repwt), funs((. * !!sym(names))/!!quo(N))) %>%
-      summarise_at(vars(dsn$repwt), funs(sum(.)))
+    replicates = d %>%
+      summarise_at(vars(dsn$repwt), funs(sum(. * !!sym(names)))) %>%
+      transmute(!!!parse_exprs(repN)) %>% compute()
     repMean = replicates %>%
       summarise_all(funs((. - !!quo(fullMean[cnt]))^2))
     cnt <<- cnt + 1
@@ -71,7 +74,6 @@ svydbrepmean = function(x, design, num, return.replicates = F){
              transmute_all(funs(. * !!quo(dsn$scale))) %>% collect())
     }
   }
-
   ans = lapply(colnames(fullMeanTbl), getRepTots, fullMean = as.vector(t(fullMeanTbl)))
   repVar = lapply(ans, function(x) x$repVar) %>% Reduce(rbind, .) %>% pull()
 
