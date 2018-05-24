@@ -65,6 +65,7 @@ svydbboxplot = function(x, groups = NULL, design, varwidth = F, outlier = F, all
     }
 
     haveOut = F
+    outlsLst = list()
     if (outlier == T) {
         boxes = boxes %>% mutate(outUP = d + 1.5 * (d - b), checkUP = ifelse(outUP < e, T, F), outLow = b - 1.5 *
             (d - b), checkLow = ifelse(outLow > a, T, F))
@@ -79,6 +80,7 @@ svydbboxplot = function(x, groups = NULL, design, varwidth = F, outlier = F, all
                 outlsLow = outlsLow %>% group_by(x) %>% summarise(y = min(y))
             }
             outlsLow = outlsLow %>% tbl_df()
+            outlsLst = c(outlsLst, list(outlsLow))
         }
 
         if (any(boxes$checkUP) == T) {
@@ -91,8 +93,8 @@ svydbboxplot = function(x, groups = NULL, design, varwidth = F, outlier = F, all
                 outlsUP = outlsUP %>% group_by(x) %>% summarise(y = max(y))
             }
             outlsUP = outlsUP %>% tbl_df()
+            outlsLst = c(outlsLst, list(outlsUP))
         }
-        outls = bind_rows(outlsUP, outlsLow)
     }
 
     p = ggplot(boxes) + labs(x = ax["x"], y = ax["y"])
@@ -108,7 +110,8 @@ svydbboxplot = function(x, groups = NULL, design, varwidth = F, outlier = F, all
     }
 
     if (haveOut == T) {
-        p = p + geom_point(data = outls, aes(x = x, y = y))
+        outlsLst = Reduce(rbind, outlsLst)
+        p = p + geom_point(data = outlsLst, aes(x = x, y = y))
     }
 
     print(p)
