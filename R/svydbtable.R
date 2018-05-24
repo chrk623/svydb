@@ -9,7 +9,7 @@
 #' @examples
 #' data(nhane)
 #' nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
-#' svydbtable (~Race3 + Smoke100 + Gender, nh.dbsur)
+#' svydbtable (~Race3 + Smoke100 + Gender, nh.dbsurv)
 #' svydbtable (~MaritalStatus , design = nh.dbsurv , as.local = T)
 #' # OR with a database connection
 #' # require(MonetDBLite)
@@ -58,11 +58,12 @@ svydbtable = function(formula, design, as.local = F) {
     }
 
     dsn$storename("others", ff[-c(1, 2)], force = T)
+    d = db_columnAsCharacter(d, dsn$names$others)
     combnTbl = d %>% select(dsn$names$others) %>% distinct() %>% arrange(!!!syms(dsn$names$others)) %>% collect()
     combnLst = split(combnTbl, seq(1, nrow(combnTbl)))
 
     sTbls = function(by) {
-        nname = paste(colnames(by), " = ", by, collapse = " & ")
+        nname = paste(colnames(by), " = ", "'", by, "'", sep = "", collapse = " & ")
         con = gsub(pattern = "=", replacement = "==", nname)
         d = d %>% filter(!!parse_expr(con)) %>% select(-one_of(colnames(by))) %>% group_by(!!sym(dsn$names$base)) %>%
             summarise_at(vars(dsn$names$dummy), funs(sum(. * (!!sym(dsn$wt))))) %>% arrange(!!sym(dsn$names$base)) %>%

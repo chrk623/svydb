@@ -161,6 +161,20 @@ c2f = function(x) {
     as.formula(paste("~", x, sep = ""))
 }
 
+db_columnAsCharacter = function(x, cols){
+
+  checktype =  x %>% select(!!!syms(cols)) %>%
+    head(1) %>% collect %>% lapply(type_sum) %>% unlist()
+
+  numCols = checktype[checktype %in% c("int", "dbl")] %>% names()
+
+  for(i in 1:length(numCols)){
+    x = x %>% mutate(!!quo_name(numCols[1]) := as.character(!!sym(numCols[1])))
+  }
+
+  x
+}
+
 svydb_monet_sampleN = function(data, n) {
     q = paste("SELECT * FROM", data$ops$x, "SAMPLE", n)
     dbGetQuery(data$src$con, q)

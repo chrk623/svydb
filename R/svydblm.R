@@ -46,8 +46,10 @@ svydblm = function(formula, design) {
     dsn$storename("y", all.vars(formula)[1])
     dsn$storename("variables", all.vars(formula)[-1])
 
-    d = d %>% mutate(`:=`(!!sym(dsn$wt), case_when(is.na(!!sym(dsn$names$y)) ~ 0, TRUE ~ !!sym(dsn$wt))))
-    d = d %>% mutate(`:=`(!!sym(dsn$names$y), case_when(is.na(!!sym(dsn$names$y)) ~ 0, TRUE ~ !!sym(dsn$names$y))))
+    d = d %>%
+      mutate(!!sym(dsn$wt) := case_when(is.na(!!sym(dsn$names$y))
+                                        ~ 0, TRUE ~ !!sym(dsn$wt)))
+    # d = d %>% mutate(`:=`(!!sym(dsn$names$y), case_when(is.na(!!sym(dsn$names$y)) ~ 0, TRUE ~ !!sym(dsn$names$y))))
     d = d %>% filter_all(all_vars(!is.na(.)))
     d = d %>% mutate(intercept = 1)
     dsn$storename("intercept", colnames(d))
