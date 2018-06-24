@@ -22,7 +22,7 @@ Computes the co-ordinates and the necessary information to plot the hexagons.
 data(nhane)
 nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
 hb = svydbhexbin(Height~Weight , design = nh.dbsurv)
-svydbhexplot(hb, main = "Height vs Age")
+svydbhexplot(hb)
 # OR with a database connection
 # require(MonetDBLite)
 # require(DBI)

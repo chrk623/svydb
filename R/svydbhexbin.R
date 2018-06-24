@@ -70,7 +70,7 @@ svydbhbin = function(xy, x, y, xName, yName, cell, cnt, xcm, ycm, size, shape, r
 #' data(nhane)
 #' nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
 #' hb = svydbhexbin(Height~Weight , design = nh.dbsurv)
-#' svydbhexplot(hb, main = "Height vs Age")
+#' svydbhexplot(hb)
 #' # OR with a database connection
 #' # require(MonetDBLite)
 #' # require(DBI)
