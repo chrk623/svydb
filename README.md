@@ -12,3 +12,7 @@ the Nationwide Emergency Department Sample, but this approach causes compatible
 issues with different types of databases. Therefore, in this project I will work on
 implementing R functions and testing some survey computations using the dplyr
 and dbplyr R package as a database interface.
+
+Supervisor: Professor Thomas Lumley
+
+My thanks to Thomas for writing a blog post about this project, https://notstatschat.rbind.io/2018/06/09/survey-analysis-in-sql/.
