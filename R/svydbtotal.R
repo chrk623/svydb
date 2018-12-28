@@ -67,6 +67,9 @@ svydbtotal = function(x, num, design, return.total = F, ...) {
     varTbl = varTbl %>% mutate(!!!parse_exprs(`zhi-zbar`)) %>% ungroup() %>% compute(temporary = T)
     dsn$storename("diff", colnames(varTbl))
 
+    if(getOption("svydb.lonely.psu") == "remove") {
+        varTbl = varTbl %>% filter(m_h > 1)
+    }
     varTbl = sapply(dsn$names$diff, svydbVar, st = dsn$st, m_h = "m_h", data = varTbl)
 
     class(totTbl) = "svydbstat"
