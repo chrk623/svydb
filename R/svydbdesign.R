@@ -12,43 +12,81 @@ makesvydbdesign <- R6Class("svydb.design",
                              levels = list(),
                              initialize = function(vars = NA, st = NA,
                                                    id = NA, wt = NA, data){
+
                                if(quo_is_null(wt)){
                                  stop("Please provide sampling weights")
                                }else{
-                                 self$wt = as.character(wt)[2]
+                                 # self$wt = as.character(wt)[2]
+                                 self$wt = quo_name(wt)
                                }
 
                                if(quo_is_null(st)){
                                  data = data %>% mutate(st = 1)
                                  self$st = "st"
                                }else{
-                                 self$st = as.character(st)[2]
+                                 # self$st = as.character(st)[2]
+                                 self$st = quo_text(st)
                                }
 
                                if(quo_is_null(id)){
                                  data = data %>% mutate(id = row_number())
                                  self$id = "id"
                                }else{
-                                 self$id = as.character(id)[2]
+                                 # self$id = as.character(id)[2]
+                                 self$id = quo_text(id)
                                }
                                self$data = data %>% select(everything())
                                self$dataOg <<- self$data
                              },
-                             setx = function(x){
+                             setx = function(x, lonely.psu = getOption("svydb.lonely.psu")){
                                tc = tryCatch(class(x), error = function(e) e)
 
                                if("formula" %in% tc){
                                  x = all.vars(x)
-                                 self$data <<- self$data %>%
-                                   select(!!x, self$st, self$id, self$wt) %>%
-                                   filter_all(any_vars(!is.na(.)))
+
+                                 if(lonely.psu == "remove") {
+                                   old_length = length(colnames(self$data))
+                                   self$data  = self$data %>%
+                                     select(!!x, self$st, self$id, self$wt) %>%
+                                     mutate_at(vars(x), funs(ifelse(is.na(.), 0, .))) %>%
+                                     mutate_at(vars(x), funs("0_check" = . == 0))
+                                   new_col = colnames(self$data)[old_length:length(colnames(self$data))]
+
+                                   new_expr = paste(new_col, collapse = " + ")
+                                   self$data = self$data %>% mutate(!!parse_expr(new_expr)) %>%
+                                     select(-one_of(new_col))
+                                   old_length = length(colnames(self$data))
+                                   new_col2 = colnames(self$data)[old_length:length(colnames(self$data))]
+                                   self$data = self$data %>%
+                                     mutate_at(vars(new_col2), funs(ifelse(. == 0, 1, 0)))%>%
+                                     mutate(!!quo_name(self$wt) :=
+                                              !!parse_expr(paste0(self$wt, "*", "`", new_col2, "`"))) %>%
+                                     select(-new_col2)
+                                 } else {
+                                   self$data <<- self$data %>%
+                                     select(!!x, self$st, self$id, self$wt) %>%
+                                     filter_all(any_vars(!is.na(.)))
+                                 }
+
+
                                  self$vars <<- x
                                }else{
                                  x = enquo(x)
+                                 wt = sym(self$wt)
+
                                  self$data <<- self$data %>%
-                                   select(!!x, self$st, self$id, self$wt) %>%
-                                   filter(!is.na(!!x))
-                                 self$vars <<- as.character(x)[2]
+                                   select(!!x, self$st, self$id, !!wt)
+
+                                 if(lonely.psu == "remove") {
+                                   self$data <<- self$data %>%
+                                     mutate(!!quo_text(x) := ifelse(is.na(!!x), 0, !!x),
+                                            !!quo_name(wt) := ifelse(is.na(!!wt), 0, !!wt)) %>%
+                                     mutate(!!quo_name(wt) := ifelse(!!x == 0, 0, !!wt))
+                                 } else {
+                                   self$data <<- self$data %>% filter(!is.na(!!x))
+                                 }
+                                 # self$vars <<- as.character(x)[2]
+                                 self$vars <<- quo_text(x)
                                }
                                self$names[["logged"]] = c(self$st, self$id, self$wt, "m_h")
                              },
@@ -59,8 +97,8 @@ makesvydbdesign <- R6Class("svydb.design",
                                  select(!!l, !!!r)
                              },
                              getwt = function(){
-                               self$data %>% select(self$wt) %>% summarise_all(sum) %>%
-                                 pull()
+                               self$data %>% select(self$vars, self$wt) %>% filter_all(all_vars(. != 0)) %>%
+                                 summarise_at(vars(self$wt), funs(sum(.))) %>% pull()
                              },
                              getmh = function(){
                                self$data %>% group_by(!!sym(self$st)) %>%
@@ -145,6 +183,12 @@ svydbdesign = function(st = NULL, id = NULL, wt = NULL, data){
   st = enquo(st)
   id = enquo(id)
   wt = enquo(wt)
+
+  if(isFALSE(quo_is_symbol(st)) | isFALSE(quo_is_symbol(id)) |
+     isFALSE(quo_is_symbol(wt))) {
+    stop("Do not use the class of character for the input,
+          e.g use st = strat instead of strat = 'strat'")
+  }
 
   d = makesvydbdesign$new(st = st, id = id, wt = wt, data = data)
   d$storecall(match.call())

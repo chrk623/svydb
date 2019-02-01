@@ -132,26 +132,40 @@ db_cut2 = function(var, breaks, right = TRUE, data) {
     return(data)
 }
 
-svydbVar2 = function(x, xleft = 1, xright = 2, st, m_h, data) {
+svydbVar2 = function(x, xleft = 1, xright = 2, st, m_h, data,
+                     lonely.psu = options("svydb.lonely.psu"), ...) {
+    if(lonely.psu == "remove") {
+      data = data %>% filter(m_h > 1)
+    }
     xleft = x[xleft]
     xright = x[xright]
     m = data
     m = m %>% select(xleft = !!sym(xleft), xright = !!sym(xright), st = st, m_h = m_h)
     m_h = m %>% select(st, m_h) %>% mutate(m_h = 1) %>% group_by(st) %>% summarise(m_h = sum(m_h))
+    if(lonely.psu == "remove") {
+      m_h = m_h %>% filter(m_h > 1)
+    }
     m = m %>% select(-m_h)
     m = m %>% mutate(ztz = xleft * xright) %>% group_by(st) %>% summarise(ztz = sum(ztz))
-    m = left_join(m, m_h, by = "st")
+    m = left_join(m, m_h, by = "st") %>% filter(!is.na(m_h))
     m = m %>% mutate(scaled = ztz * (m_h/(m_h - 1))) %>% select(scaled) %>% summarise(sum(scaled)) %>% compute(temporary = T) %>%
         pull()
     return(m)
 }
-svydbVar = function(x, st, m_h, data) {
+svydbVar = function(x, st, m_h, data,
+                    lonely.psu = options("svydb.lonely.psu"), ...) {
+    if(lonely.psu == "remove") {
+      data = data %>% filter(!!sym(m_h) > 1)
+    }
     m = data
     m = m %>% select(x = x, st = st, m_h = m_h)
     m_h = m %>% select(st, m_h) %>% mutate(m_h = 1) %>% group_by(st) %>% summarise(m_h = sum(m_h))
+    if(lonely.psu == "remove") {
+      m_h = m_h %>% filter(m_h > 1)
+    }
     m = m %>% select(-m_h)
     m = m %>% mutate(ztz = x * x) %>% group_by(st) %>% summarise(ztz = sum(ztz))
-    m = left_join(m, m_h, by = "st")
+    m = left_join(m, m_h, by = "st") %>% filter(!is.na(m_h))
     m = m %>% mutate(scaled = ztz * (m_h/(m_h - 1))) %>% select(scaled) %>% summarise(sum(scaled)) %>% compute(temporary = T) %>%
         pull()
     return(m)
