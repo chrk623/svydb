@@ -8,7 +8,7 @@ Description: Survey statistics in a database.
 License: GPL-3
 Encoding: UTF-8
 LazyData: FALSE
-Imports: R6 (>= 2.4.0),
+Depends: R6 (>= 2.4.0),
     dplyr (>= 0.8.3),
     rlang (>= 0.4.0),
     survey (>= 3.36),
