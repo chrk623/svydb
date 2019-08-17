@@ -8,12 +8,12 @@ Description: Survey statistics in a database.
 License: GPL-3
 Encoding: UTF-8
 LazyData: FALSE
-Depends: R6,
-    dplyr,
-    rlang,
-    survey,
-    ggplot2
-Suggests: DBI,
+Imports: R6,
+    dplyr (>= 0.8.3),
+    rlang (>= 0.4.0),
+    survey (>= 3.36),
+    ggplot2 (>= 3.2.0)
+Suggests: DBI (>= 1.0.0),
     MonetDBLite,
-    dbplyr
+    dbplyr (>= 1.4.2)
 RoxygenNote: 6.1.1
