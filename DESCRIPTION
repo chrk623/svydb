@@ -1,7 +1,7 @@
 Package: svydb
 Type: Package
 Title: Survey statistics in a database.
-Version: 0.1.0
+Version: 0.1.1
 Author: Charco Hui
 Maintainer: Charco Hui <phui285@aucklanduni.ac.nz>
 Description: Survey statistics in a database.
