@@ -193,33 +193,33 @@ svydb_monet_sampleN = function(data, n) {
     q = paste("SELECT * FROM", data$ops$x, "SAMPLE", n)
     dbGetQuery(data$src$con, q)
 }
-
+#' @export
 as.data.frame.svydbstat = function(x) {
     ans = cbind(coef(x), SE(x))
     colnames(ans) = c(attr(x, "statistic"), "SE")
     ans
 }
-
+#' @export
 print.svydbstat = function(xx, ...) {
     v <- attr(xx, "var")
     m = cbind(xx, sqrt(v))
     colnames(m) = c(attr(xx, "statistic"), "SE")
     printCoefmat(m)
 }
-
+#' @export
 coef.svydbstat = function(object, ...) {
     attr(object, "statistic") = NULL
     attr(object, "name") = NULL
     attr(object, "var") = NULL
     unclass(object) %>% t() %>% as.vector()
 }
-
+#' @export
 SE.svydbstat = function(x, ...) {
     s = attr(x, "var") %>% sqrt()
     names(s) = attr(x, "name")
     return(s)
 }
-
+#' @export
 print.svydbrepstat =  function (xx, ...){
   if(is.list(xx)){
     xx = xx$svydbrepstat
@@ -230,7 +230,7 @@ print.svydbrepstat =  function (xx, ...){
   rownames(m) = attr(xx, "name")
   printCoefmat(m)
 }
-
+#' @export
 coef.svydbrepstat = function(object, ...) {
     if (is.list(object)) {
         object = object$svydbrepstat
@@ -240,7 +240,7 @@ coef.svydbrepstat = function(object, ...) {
     attr(object, "var") = NULL
     unclass(object) %>% t() %>% as.vector()
 }
-
+#' @export
 SE.svydbrepstat = function(x, ...) {
     if (is.list(x)) {
         x = x$svydbrepstat
@@ -249,7 +249,7 @@ SE.svydbrepstat = function(x, ...) {
     names(s) = attr(x, "name")
     return(s)
 }
-
+#' @export
 print.svydblm = function(x, digits = max(3L, getOption("digits") - 3L), ...) {
     print(x$design)
     cat("\nSurvey design:\n")
@@ -262,6 +262,7 @@ print.svydblm = function(x, digits = max(3L, getOption("digits") - 3L), ...) {
     cat("\n")
     invisible(x)
 }
+#' @export
 summary.svydblm = function(object) {
     df.r = object$df.residual
     coef.p = coef(object)
@@ -279,6 +280,7 @@ summary.svydblm = function(object) {
     class(ans) <- c("summary.svydblm", "summary.glm")
     return(ans)
 }
+#' @export
 print.summary.svydblm = function(x, digits = max(3, getOption("digits") - 3), signif.stars = getOption("show.signif.stars"),
     ...) {
     cat("\nCall:\n")
@@ -295,7 +297,7 @@ print.summary.svydblm = function(x, digits = max(3, getOption("digits") - 3), si
     printCoefmat(coefs, digits = digits, signif.stars = signif.stars, na.print = "NA", ...)
     invisible(x)
 }
-
+#' @export
 predict.svydblm = function(object, newdata = NULL, ...) {
     tt = delete.response(object$terms)
     mf = model.frame(tt, data = newdata, xlev = object$design$levels)
@@ -306,7 +308,7 @@ predict.svydblm = function(object, newdata = NULL, ...) {
     class(eta) <- "svydbstat"
     eta
 }
-
+#' @export
 vcov.svydblm = function(x, ...) {
     x$cov.unscaled
 }

@@ -36,9 +36,9 @@ svydbboxplot(x = Height , groups = Race3 ,design = nh.dbsurv, outlier = T)
 svydbboxplot(x = Weight , groups = Gender ,design = nh.dbsurv,
      outlier = T, all.outlier = T, varwidth = T)
 # OR with a database connection
-# require(MonetDBLite)
-# require(DBI)
-# require(dbplyr)
+# library(MonetDBLite)
+# library(DBI)
+# library(dbplyr)
 # con = dbConnect(MonetDBLite())
 # dbWriteTable(con, "nhane", nhane)
 # nhane.db = tbl(con, "nhane")

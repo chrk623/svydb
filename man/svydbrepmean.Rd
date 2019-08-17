@@ -27,9 +27,9 @@ svydbrepmean(x = HHT, design = hde.dbrepsurv , num = T, return.replicates = T)$r
 coef(svydbrepmean(x = BATH, design = hde.dbrepsurv , num = T))
 SE(svydbrepmean(x = BATH, design = hde.dbrepsurv , num = T))
 # OR with a database connection
-# require(MonetDBLite)
-# require(DBI)
-# require(dbplyr)
+# library(MonetDBLite)
+# library(DBI)
+# library(dbplyr)
 # con = dbConnect(MonetDBLite())
 # dbWriteTable(con, "ss16hde", ss16hde)
 # ss16hde.db = tbl(con, "ss16hde")

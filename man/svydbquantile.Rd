@@ -22,9 +22,9 @@ nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhan
 svydbquantile(x = Age , quantile = 0.5, design = nh.dbsurv)
 svydbquantile(x = Age , quantile = c(0.25, 0.75), design = nh.dbsurv)
 # OR with a database connection
-# require(MonetDBLite)
-# require(DBI)
-# require(dbplyr)
+# library(MonetDBLite)
+# library(DBI)
+# library(dbplyr)
 # con = dbConnect(MonetDBLite())
 # dbWriteTable(con, "nhane", nhane)
 # nhane.db = tbl(con, "nhane")

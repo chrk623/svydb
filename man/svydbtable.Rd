@@ -20,12 +20,12 @@ Create contingency tables for survey data sets.
 \examples{
 data(nhane)
 nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
-svydbtable (~Race3 + Smoke100 + Gender, nh.dbsurv)
-svydbtable (~MaritalStatus , design = nh.dbsurv , as.local = T)
+svydbtable(~Race3 + Smoke100 + Gender, nh.dbsurv)
+svydbtable(~MaritalStatus , design = nh.dbsurv , as.local = T)
 # OR with a database connection
-# require(MonetDBLite)
-# require(DBI)
-# require(dbplyr)
+# library(MonetDBLite)
+# library(DBI)
+# library(dbplyr)
 # con = dbConnect(MonetDBLite())
 # dbWriteTable(con, "nhane", nhane)
 # nhane.db = tbl(con, "nhane")

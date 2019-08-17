@@ -15,9 +15,9 @@
 #' coef(svydbrepmean(x = BATH, design = hde.dbrepsurv , num = T))
 #' SE(svydbrepmean(x = BATH, design = hde.dbrepsurv , num = T))
 #' # OR with a database connection
-#' # require(MonetDBLite)
-#' # require(DBI)
-#' # require(dbplyr)
+#' # library(MonetDBLite)
+#' # library(DBI)
+#' # library(dbplyr)
 #' # con = dbConnect(MonetDBLite())
 #' # dbWriteTable(con, "ss16hde", ss16hde)
 #' # ss16hde.db = tbl(con, "ss16hde")
@@ -25,6 +25,7 @@
 #' @author Charco Hui
 #' @seealso
 #' \code{\link{svydbrepdesign}}, \code{\link{svydbreptotal}}
+#' @export
 
 svydbrepmean = function(x, design, num, return.replicates = F){
   x = enquo(x)
@@ -62,16 +63,23 @@ svydbrepmean = function(x, design, num, return.replicates = F){
     replicates = d %>%
       summarise_at(vars(dsn$repwt), funs(sum(. * !!sym(names)))) %>%
       transmute(!!!parse_exprs(repN)) %>% compute()
+    # repMean = replicates %>%
+    #   summarise_all(funs((. - !!quo(fullMean[cnt]))^2))
     repMean = replicates %>%
-      summarise_all(funs((. - !!quo(fullMean[cnt]))^2))
+      summarise_all(funs((. - local(fullMean[cnt]))^2))
     cnt <<- cnt + 1
     if(return.replicates == T){
+      # list(replicates = replicates,
+      #      repVar = db_rowSums(repMean) %>%
+      #        transmute_all(funs(. * !!quo(dsn$scale))) %>% collect())
       list(replicates = replicates,
            repVar = db_rowSums(repMean) %>%
-             transmute_all(funs(. * !!quo(dsn$scale))) %>% collect())
+             transmute_all(funs(. * local(dsn$scale))) %>% collect())
     }else{
+      # list(repVar = db_rowSums(repMean) %>%
+      #        transmute_all(funs(. * !!quo(dsn$scale))) %>% collect())
       list(repVar = db_rowSums(repMean) %>%
-             transmute_all(funs(. * !!quo(dsn$scale))) %>% collect())
+             transmute_all(funs(. * local(dsn$scale))) %>% collect())
     }
   }
   ans = lapply(colnames(fullMeanTbl), getRepTots, fullMean = as.vector(t(fullMeanTbl)))

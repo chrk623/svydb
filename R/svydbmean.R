@@ -15,9 +15,9 @@
 #' coef(svydbmean(x = DirectChol, design = nh.dbsurv , num = T))
 #' SE(svydbmean(x = DirectChol, design = nh.dbsurv , num = T))
 #' # OR with a database connection
-#' # require(MonetDBLite)
-#' # require(DBI)
-#' # require(dbplyr)
+#' # library(MonetDBLite)
+#' # library(DBI)
+#' # library(dbplyr)
 #' # con = dbConnect(MonetDBLite())
 #' # dbWriteTable(con, "nhane", nhane)
 #' # nhane.db = tbl(con, "nhane")
@@ -25,6 +25,7 @@
 #' @author Charco Hui
 #' @seealso
 #' \code{\link{svydbdesign}}, \code{\link{svydbtotal}}
+#' @export
 
 svydbmean = function(x, num, design, return.mean = F,
                      lonely.psu = getOption("svydb.lonely.psu"), ...) {
@@ -56,8 +57,8 @@ svydbmean = function(x, num, design, return.mean = F,
         return(meanTbl)
     }
 
-    dhi_exprs = paste(dsn$names$x, " - ", "meanTbl$", dsn$names$x, sep = "", collapse = " ; ")
-    varTbl = d %>% mutate(dhi = !!!parse_exprs(dhi_exprs))
+    dhi_exprs = paste(dsn$names$x, " - ", "local(meanTbl$", dsn$names$x, ")", sep = "", collapse = " ; ")
+    varTbl = d %>% mutate(!!!parse_exprs(dhi_exprs))
     dsn$storename("dhi", colnames(varTbl))
 
     varTbl = varTbl %>% mutate_at(vars(dsn$names$dhi), funs((. * !!sym(dsn$wt))/!!quo(N))) %>% select(dsn$st, dsn$id,
@@ -80,7 +81,7 @@ svydbmean = function(x, num, design, return.mean = F,
     meanTbl = t(meanTbl)
     class(meanTbl) = "svydbstat"
     attr(meanTbl, "var") = varTbl
-    attr(meanTbl, "statistic") <- "Mean"
+    attr(meanTbl, "statistic") = "Mean"
     attr(meanTbl, "name") = dsn$names$x
 
     return(meanTbl)

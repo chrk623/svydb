@@ -15,9 +15,9 @@
 #' coef(svydbreptotal(x = BATH, design = hde.dbrepsurv , num = T))
 #' SE(svydbreptotal(x = BATH, design = hde.dbrepsurv , num = T))
 #' # OR with a database connection
-#' # require(MonetDBLite)
-#' # require(DBI)
-#' # require(dbplyr)
+#' # library(MonetDBLite)
+#' # library(DBI)
+#' # library(dbplyr)
 #' # con = dbConnect(MonetDBLite())
 #' # dbWriteTable(con, "ss16hde", ss16hde)
 #' # ss16hde.db = tbl(con, "ss16hde")
@@ -25,6 +25,7 @@
 #' @author Charco Hui
 #' @seealso
 #' \code{\link{svydbrepdesign}}, \code{\link{svydbreptotal}}
+#' @export
 
 svydbreptotal = function(x, design, num, return.replicates = F){
   x = enquo(x)

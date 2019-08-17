@@ -16,4 +16,4 @@ Depends: R6,
 Suggests: DBI,
     MonetDBLite,
     dbplyr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1

@@ -169,23 +169,23 @@ makesvydbdesign <- R6Class("svydb.design",
 #' nh.dbsurv$getwt()
 #' nh.dbsurv$clone()
 #' # OR with a database connection
-#' # require(MonetDBLite)
-#' # require(DBI)
-#' # require(dbplyr)
+#' # library(MonetDBLite)
+#' # library(DBI)
+#' # library(dbplyr)
 #' # con = dbConnect(MonetDBLite())
 #' # dbWriteTable(con, "nhane", nhane)
 #' # nhane.db = tbl(con, "nhane")
 #' @author Charco Hui
 #' @seealso
 #' \code{\link{svydbtotal}}, \code{\link{svydbmean}}
-#'
+#' @export
 svydbdesign = function(st = NULL, id = NULL, wt = NULL, data){
   st = enquo(st)
   id = enquo(id)
   wt = enquo(wt)
 
-  if(isFALSE(quo_is_symbol(st)) | isFALSE(quo_is_symbol(id)) |
-     isFALSE(quo_is_symbol(wt))) {
+  if(quo_is_symbol(st) == FALSE | quo_is_symbol(id) == FALSE |
+     quo_is_symbol(wt) == FALSE) {
     stop("Do not use the class of character for the input,
           e.g use st = strat instead of strat = 'strat'")
   }

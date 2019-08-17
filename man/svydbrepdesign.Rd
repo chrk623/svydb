@@ -4,8 +4,8 @@
 \alias{svydbrepdesign}
 \title{Survey replicate design}
 \usage{
-svydbrepdesign(st = NULL, id = NULL, wt = NULL, repwt = NULL, scale,
-  data)
+svydbrepdesign(st = NULL, id = NULL, wt = NULL, repwt = NULL,
+  scale, data)
 }
 \arguments{
 \item{st}{Column name specifying the strata column. \code{NULL} for no strata.}
@@ -31,9 +31,9 @@ hde.dbrepsurv = svydbrepdesign(wt = WGTP, repwt="wgtp[0-9]+", scale = 4/80, data
 hde.dbrepsurv$subset(BATH == 1)
 hde.dbrepsurv$clone()
 # OR with a database connection
-# require(MonetDBLite)
-# require(DBI)
-# require(dbplyr)
+# library(MonetDBLite)
+# library(DBI)
+# library(dbplyr)
 # con = dbConnect(MonetDBLite())
 # dbWriteTable(con, "ss16hde", ss16hde)
 # ss16hde.db = tbl(con, "ss16hde")

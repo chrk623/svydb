@@ -4,7 +4,8 @@
 \alias{svydbhist}
 \title{Histogram}
 \usage{
-svydbhist(x, design, binwidth = NULL, xlab = "x", ylab = "Density", ...)
+svydbhist(x, design, binwidth = NULL, xlab = "x", ylab = "Density",
+  ...)
 }
 \arguments{
 \item{x}{Name indicating the variable.}
@@ -26,9 +27,9 @@ svydbhist(x = DirectChol , design = nh.dbsurv ,binwidth = 0.25)
 svydbhist(x = Height , design = nh.dbsurv, xlab = "xx", ylab = "yy")
 svydbhist(x = Weight , design = nh.dbsurv) + ggtitle("Weight")
 # OR with a database connection
-# require(MonetDBLite)
-# require(DBI)
-# require(dbplyr)
+# library(MonetDBLite)
+# library(DBI)
+# library(dbplyr)
 # con = dbConnect(MonetDBLite())
 # dbWriteTable(con, "nhane", nhane)
 # nhane.db = tbl(con, "nhane")

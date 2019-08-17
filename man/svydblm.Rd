@@ -28,9 +28,9 @@ predict(svydblm(DirectChol ~ Age + BMI,design = nh.dbsurv),
     newdata = data.frame(Age = 1:3, BMI = 4:6))
 # OR with a database connection
 # OR with a database connection
-# require(MonetDBLite)
-# require(DBI)
-# require(dbplyr)
+# library(MonetDBLite)
+# library(DBI)
+# library(dbplyr)
 # con = dbConnect(MonetDBLite())
 # dbWriteTable(con, "nhane", nhane)
 # nhane.db = tbl(con, "nhane")

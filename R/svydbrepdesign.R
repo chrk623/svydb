@@ -16,7 +16,7 @@ makesvydbrepdesign <- R6Class("svydb.repdesign",
                                   if(quo_is_null(wt)){
                                     stop("Please provide sampling weights")
                                   }else{
-                                    self$wt = as.character(wt)[2]
+                                    self$wt = as_label(wt)
                                   }
 
                                   if(is.null(repwt)){
@@ -29,14 +29,14 @@ makesvydbrepdesign <- R6Class("svydb.repdesign",
                                     data = data %>% mutate(st = 1)
                                     self$st = "st"
                                   }else{
-                                    self$st = as.character(st)[2]
+                                    self$st = as_label(st)
                                   }
 
                                   if(quo_is_null(id)){
                                     data = data %>% mutate(id = row_number())
                                     self$id = "id"
                                   }else{
-                                    self$id = as.character(id)[2]
+                                    self$id = as_label(id)
                                   }
                                   self$scale = scale
                                   self$data = data %>% select(everything())
@@ -56,7 +56,7 @@ makesvydbrepdesign <- R6Class("svydb.repdesign",
                                     self$data <<- self$data %>%
                                      select(!!x, st = self$st, id = self$id, self$wt, self$repwt) %>%
                                       filter(!is.na(!!x))
-                                    self$vars <<- as.character(x)[2]
+                                    self$vars <<- as.character(x)
                                   }
                                   self$names[["logged"]] = c(self$st, self$id, self$wt, self$repwt, "m_h")
                                 },
@@ -128,16 +128,15 @@ makesvydbrepdesign <- R6Class("svydb.repdesign",
 #' hde.dbrepsurv$subset(BATH == 1)
 #' hde.dbrepsurv$clone()
 #' # OR with a database connection
-#' # require(MonetDBLite)
-#' # require(DBI)
-#' # require(dbplyr)
+#' # library(MonetDBLite)
+#' # library(DBI)
+#' # library(dbplyr)
 #' # con = dbConnect(MonetDBLite())
 #' # dbWriteTable(con, "ss16hde", ss16hde)
 #' # ss16hde.db = tbl(con, "ss16hde")
 #' # hde.dbrepsurv = svydbrepdesign(wt = WGTP, repwt="wgtp[0-9]+", scale = 4/80, data = ss16hde.db)
 #' @author Charco Hui
-
-#'
+#' @export
 svydbrepdesign = function(st = NULL, id = NULL, wt = NULL, repwt = NULL, scale, data){
   st = enquo(st)
   id = enquo(id)

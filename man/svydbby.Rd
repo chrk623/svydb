@@ -27,9 +27,9 @@ nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhan
 svydbby(x = Age , by = Gender , FUN = svydbmean ,design = nh.dbsurv , num = T)
 svydbby(x = BMI , by = Race3, FUN = svydbtotal ,design = nh.dbsurv , num = T)
 # OR with a database connection
-# require(MonetDBLite)
-# require(DBI)
-# require(dbplyr)
+# library(MonetDBLite)
+# library(DBI)
+# library(dbplyr)
 # con = dbConnect(MonetDBLite())
 # dbWriteTable(con, "nhane", nhane)
 # nhane.db = tbl(con, "nhane")

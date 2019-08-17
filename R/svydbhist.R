@@ -14,9 +14,9 @@
 #' svydbhist(x = Height , design = nh.dbsurv, xlab = "xx", ylab = "yy")
 #' svydbhist(x = Weight , design = nh.dbsurv) + ggtitle("Weight")
 #' # OR with a database connection
-#' # require(MonetDBLite)
-#' # require(DBI)
-#' # require(dbplyr)
+#' # library(MonetDBLite)
+#' # library(DBI)
+#' # library(dbplyr)
 #' # con = dbConnect(MonetDBLite())
 #' # dbWriteTable(con, "nhane", nhane)
 #' # nhane.db = tbl(con, "nhane")
@@ -24,6 +24,7 @@
 #' @author Charco Hui
 #' @seealso
 #' \code{\link{svydbdesign}}, \code{\link{svydbmean}}
+#' @export
 
 svydbhist = function(x, design, binwidth = NULL, xlab = "x", ylab = "Density", ...) {
 

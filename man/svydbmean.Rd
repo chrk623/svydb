@@ -4,7 +4,8 @@
 \alias{svydbmean}
 \title{Population Mean}
 \usage{
-svydbmean(x, num, design, return.mean = F, ...)
+svydbmean(x, num, design, return.mean = F,
+  lonely.psu = getOption("svydb.lonely.psu"), ...)
 }
 \arguments{
 \item{x}{Name indicating the variable.}
@@ -27,9 +28,9 @@ svydbmean(x = DirectChol, design = nh.dbsurv , num = T, return.mean = T)
 coef(svydbmean(x = DirectChol, design = nh.dbsurv , num = T))
 SE(svydbmean(x = DirectChol, design = nh.dbsurv , num = T))
 # OR with a database connection
-# require(MonetDBLite)
-# require(DBI)
-# require(dbplyr)
+# library(MonetDBLite)
+# library(DBI)
+# library(dbplyr)
 # con = dbConnect(MonetDBLite())
 # dbWriteTable(con, "nhane", nhane)
 # nhane.db = tbl(con, "nhane")

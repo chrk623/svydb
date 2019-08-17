@@ -10,9 +10,9 @@
 #' nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
 #' svydbcoplot(Age~Height , by = SmokeNow~Gender ,design = nh.dbsurv)
 #' # OR with a database connection
-#' # require(MonetDBLite)
-#' # require(DBI)
-#' # require(dbplyr)
+#' # library(MonetDBLite)
+#' # library(DBI)
+#' # library(dbplyr)
 #' # con = dbConnect(MonetDBLite())
 #' # dbWriteTable(con, "nhane", nhane)
 #' # nhane.db = tbl(con, "nhane")
@@ -20,7 +20,7 @@
 #' @author Charco Hui
 #' @seealso
 #' \code{\link{svydbdesign}}, \code{\link{svydbhexbin}}, \code{\link{svydbhexplot}}
-#'
+#' @export
 svydbcoplot = function(formula, by, design) {
     if (!is_formula(by)) {
         stop("by must be a formula")

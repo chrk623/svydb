@@ -19,9 +19,9 @@
 #' svydbboxplot(x = Weight , groups = Gender ,design = nh.dbsurv,
 #'      outlier = T, all.outlier = T, varwidth = T)
 #' # OR with a database connection
-#' # require(MonetDBLite)
-#' # require(DBI)
-#' # require(dbplyr)
+#' # library(MonetDBLite)
+#' # library(DBI)
+#' # library(dbplyr)
 #' # con = dbConnect(MonetDBLite())
 #' # dbWriteTable(con, "nhane", nhane)
 #' # nhane.db = tbl(con, "nhane")
@@ -29,6 +29,8 @@
 #' @author Charco Hui
 #' @seealso
 #' \code{\link{svydbdesign}}, \code{\link{svydbquantile}}
+#'
+#' @export
 
 svydbboxplot = function(x, groups = NULL, design, varwidth = F, outlier = F, all.outlier = F) {
 

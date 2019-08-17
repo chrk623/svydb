@@ -15,9 +15,9 @@
 #' coef(svydbtotal(x = DirectChol, design = nh.dbsurv , num = T))
 #' SE(svydbtotal(x = DirectChol, design = nh.dbsurv , num = T))
 #' # OR with a database connection
-#' # require(MonetDBLite)
-#' # require(DBI)
-#' # require(dbplyr)
+#' # library(MonetDBLite)
+#' # library(DBI)
+#' # library(dbplyr)
 #' # con = dbConnect(MonetDBLite())
 #' # dbWriteTable(con, "nhane", nhane)
 #' # nhane.db = tbl(con, "nhane")

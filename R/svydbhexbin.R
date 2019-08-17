@@ -72,9 +72,9 @@ svydbhbin = function(xy, x, y, xName, yName, cell, cnt, xcm, ycm, size, shape, r
 #' hb = svydbhexbin(Height~Weight , design = nh.dbsurv)
 #' svydbhexplot(hb)
 #' # OR with a database connection
-#' # require(MonetDBLite)
-#' # require(DBI)
-#' # require(dbplyr)
+#' # library(MonetDBLite)
+#' # library(DBI)
+#' # library(dbplyr)
 #' # con = dbConnect(MonetDBLite())
 #' # dbWriteTable(con, "nhane", nhane)
 #' # nhane.db = tbl(con, "nhane")
@@ -82,6 +82,7 @@ svydbhbin = function(xy, x, y, xName, yName, cell, cnt, xcm, ycm, size, shape, r
 #' @author Charco Hui
 #' @seealso
 #' \code{\link{svydbdesign}}, \code{\link{svydbhexplot}}
+#' @export
 svydbhexbin = function(formula, design, xbins = 30, shape = 1) {
 
     dsn = design$clone()
