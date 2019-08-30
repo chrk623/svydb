@@ -8,12 +8,12 @@
 #' Computes population total from survey data sets.
 #' @examples
 #' data(nhane)
-#' nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
-#' svydbtotal(x = DirectChol, design = nh.dbsurv , num = T)
-#' svydbtotal(x = Race3, design = nh.dbsurv , num = F)
-#' svydbtotal(x = DirectChol, design = nh.dbsurv , num = T, return.total = T)
-#' coef(svydbtotal(x = DirectChol, design = nh.dbsurv , num = T))
-#' SE(svydbtotal(x = DirectChol, design = nh.dbsurv , num = T))
+#' nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane)
+#' svydbtotal(x = DirectChol, design = nh.dbsurv, num = T)
+#' svydbtotal(x = Race3, design = nh.dbsurv, num = F)
+#' svydbtotal(x = DirectChol, design = nh.dbsurv, num = T, return.total = T)
+#' coef(svydbtotal(x = DirectChol, design = nh.dbsurv, num = T))
+#' SE(svydbtotal(x = DirectChol, design = nh.dbsurv, num = T))
 #' # OR with a database connection
 #' # library(MonetDBLite)
 #' # library(DBI)
@@ -21,7 +21,7 @@
 #' # con = dbConnect(MonetDBLite())
 #' # dbWriteTable(con, "nhane", nhane)
 #' # nhane.db = tbl(con, "nhane")
-#' # nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane.db)
+#' # nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane.db)
 #' @author Charco Hui
 #' @seealso
 #' \code{\link{svydbdesign}}, \code{\link{svydbmean}}

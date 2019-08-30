@@ -14,6 +14,6 @@ Depends: R6 (>= 2.4.0),
     survey (>= 3.36),
     ggplot2 (>= 3.2.0)
 Suggests: DBI (>= 1.0.0),
-    MonetDBLite,
+    MonetDBLite (>= 0.6.1),
     dbplyr (>= 1.4.2)
 RoxygenNote: 6.1.1

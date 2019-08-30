@@ -21,11 +21,11 @@ Histograms weighted by sampling weights.
 }
 \examples{
 data(nhane)
-nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
-svydbhist(x = DirectChol , design = nh.dbsurv)
-svydbhist(x = DirectChol , design = nh.dbsurv ,binwidth = 0.25)
-svydbhist(x = Height , design = nh.dbsurv, xlab = "xx", ylab = "yy")
-svydbhist(x = Weight , design = nh.dbsurv) + ggtitle("Weight")
+nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane)
+svydbhist(x = DirectChol, design = nh.dbsurv)
+svydbhist(x = DirectChol, design = nh.dbsurv, binwidth = 0.25)
+svydbhist(x = Height, design = nh.dbsurv, xlab = "xx", ylab = "yy")
+svydbhist(x = Weight, design = nh.dbsurv) + ggtitle("Weight")
 # OR with a database connection
 # library(MonetDBLite)
 # library(DBI)
@@ -33,7 +33,7 @@ svydbhist(x = Weight , design = nh.dbsurv) + ggtitle("Weight")
 # con = dbConnect(MonetDBLite())
 # dbWriteTable(con, "nhane", nhane)
 # nhane.db = tbl(con, "nhane")
-# nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane.db)
+# nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane.db)
 }
 \seealso{
 \code{\link{svydbdesign}}, \code{\link{svydbmean}}

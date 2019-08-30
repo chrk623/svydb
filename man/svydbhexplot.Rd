@@ -16,18 +16,18 @@ Ploting the hexagons where the density within each hexagon is proportional to th
 }
 \examples{
 data(nhane)
-nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
-hb = svydbhexbin(Height~Weight , design = nh.dbsurv)
+nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane)
+hb = svydbhexbin(Height ~ Weight, design = nh.dbsurv)
 svydbhexplot(hb, xlab = "xx", ylab = "yy")
 svydbhexplot(hb) + theme_bw() + ggtitle("Hex")
 # OR with a database connection
-# require(MonetDBLite)
-# require(DBI)
-# require(dbplyr)
+# library(MonetDBLite)
+# library(DBI)
+# library(dbplyr)
 # con = dbConnect(MonetDBLite())
 # dbWriteTable(con, "nhane", nhane)
 # nhane.db = tbl(con, "nhane")
-# nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane.db)
+# nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane.db)
 }
 \seealso{
 \code{\link{svydbdesign}}, \code{\link{svydbhexbin}}

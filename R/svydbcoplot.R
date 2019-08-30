@@ -7,8 +7,8 @@
 #' Hexagon binning will be used for conditional plots.
 #' @examples
 #' data(nhane)
-#' nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
-#' svydbcoplot(Age~Height , by = SmokeNow~Gender ,design = nh.dbsurv)
+#' nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane)
+#' svydbcoplot(Age ~ Height, by = SmokeNow~Gender, design = nh.dbsurv)
 #' # OR with a database connection
 #' # library(MonetDBLite)
 #' # library(DBI)
@@ -16,7 +16,7 @@
 #' # con = dbConnect(MonetDBLite())
 #' # dbWriteTable(con, "nhane", nhane)
 #' # nhane.db = tbl(con, "nhane")
-#' # nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane.db)
+#' # nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane.db)
 #' @author Charco Hui
 #' @seealso
 #' \code{\link{svydbdesign}}, \code{\link{svydbhexbin}}, \code{\link{svydbhexplot}}

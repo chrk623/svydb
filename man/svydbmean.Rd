@@ -21,12 +21,12 @@ Computes population mean from survey data sets.
 }
 \examples{
 data(nhane)
-nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
-svydbmean(x = DirectChol, design = nh.dbsurv , num = T)
-svydbmean(x = Race3, design = nh.dbsurv , num = F)
-svydbmean(x = DirectChol, design = nh.dbsurv , num = T, return.mean = T)
-coef(svydbmean(x = DirectChol, design = nh.dbsurv , num = T))
-SE(svydbmean(x = DirectChol, design = nh.dbsurv , num = T))
+nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane)
+svydbmean(x = DirectChol, design = nh.dbsurv, num = T)
+svydbmean(x = Race3, design = nh.dbsurv, num = F)
+svydbmean(x = DirectChol, design = nh.dbsurv, num = T, return.mean = T)
+coef(svydbmean(x = DirectChol, design = nh.dbsurv, num = T))
+SE(svydbmean(x = DirectChol, design = nh.dbsurv, num = T))
 # OR with a database connection
 # library(MonetDBLite)
 # library(DBI)
@@ -34,7 +34,7 @@ SE(svydbmean(x = DirectChol, design = nh.dbsurv , num = T))
 # con = dbConnect(MonetDBLite())
 # dbWriteTable(con, "nhane", nhane)
 # nhane.db = tbl(con, "nhane")
-# nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane.db)
+# nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane.db)
 }
 \seealso{
 \code{\link{svydbdesign}}, \code{\link{svydbtotal}}

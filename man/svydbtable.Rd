@@ -19,9 +19,9 @@ Create contingency tables for survey data sets.
 }
 \examples{
 data(nhane)
-nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
+nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR,id = SDMVPSU, data = nhane)
 svydbtable(~Race3 + Smoke100 + Gender, nh.dbsurv)
-svydbtable(~MaritalStatus , design = nh.dbsurv , as.local = T)
+svydbtable(~MaritalStatus, design = nh.dbsurv, as.local = T)
 # OR with a database connection
 # library(MonetDBLite)
 # library(DBI)
@@ -29,7 +29,7 @@ svydbtable(~MaritalStatus , design = nh.dbsurv , as.local = T)
 # con = dbConnect(MonetDBLite())
 # dbWriteTable(con, "nhane", nhane)
 # nhane.db = tbl(con, "nhane")
-# nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane.db)
+# nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane.db)
 }
 \seealso{
 \code{\link{svydbdesign}}

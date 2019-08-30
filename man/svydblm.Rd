@@ -16,17 +16,16 @@ Linear models for survey data sets.
 }
 \examples{
 data(nhane)
-nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
+nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane)
 svydblm(DirectChol ~ Age + BMI + factor(Gender),design = nh.dbsurv)
 svydblm(DirectChol ~ Age + BMI,design = nh.dbsurv$subset(Race3 == 3))
-coef(svydblm(DirectChol ~ Age + BMI,design = nh.dbsurv))
-SE(svydblm(DirectChol ~ Age + BMI,design = nh.dbsurv))
-vcov(svydblm(DirectChol ~ Age + BMI,design = nh.dbsurv))
-head(residuals(svydblm(DirectChol ~ Age + BMI,design = nh.dbsurv)))
-summary(svydblm(DirectChol ~ Age + BMI,design = nh.dbsurv))
-predict(svydblm(DirectChol ~ Age + BMI,design = nh.dbsurv),
+coef(svydblm(DirectChol ~ Age + BMI, design = nh.dbsurv))
+SE(svydblm(DirectChol ~ Age + BMI, design = nh.dbsurv))
+vcov(svydblm(DirectChol ~ Age + BMI, design = nh.dbsurv))
+head(residuals(svydblm(DirectChol ~ Age + BMI, design = nh.dbsurv)))
+summary(svydblm(DirectChol ~ Age + BMI, design = nh.dbsurv))
+predict(svydblm(DirectChol ~ Age + BMI, design = nh.dbsurv),
     newdata = data.frame(Age = 1:3, BMI = 4:6))
-# OR with a database connection
 # OR with a database connection
 # library(MonetDBLite)
 # library(DBI)
@@ -34,7 +33,7 @@ predict(svydblm(DirectChol ~ Age + BMI,design = nh.dbsurv),
 # con = dbConnect(MonetDBLite())
 # dbWriteTable(con, "nhane", nhane)
 # nhane.db = tbl(con, "nhane")
-# nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane.db)
+# nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane.db)
 }
 \seealso{
 \code{\link{svydbdesign}}

@@ -18,9 +18,9 @@ Compute quantiles from survey data sets.
 }
 \examples{
 data(nhane)
-nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
-svydbquantile(x = Age , quantile = 0.5, design = nh.dbsurv)
-svydbquantile(x = Age , quantile = c(0.25, 0.75), design = nh.dbsurv)
+nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane)
+svydbquantile(x = Age, quantile = 0.5, design = nh.dbsurv)
+svydbquantile(x = Age, quantile = c(0.25, 0.75), design = nh.dbsurv)
 # OR with a database connection
 # library(MonetDBLite)
 # library(DBI)
@@ -28,7 +28,7 @@ svydbquantile(x = Age , quantile = c(0.25, 0.75), design = nh.dbsurv)
 # con = dbConnect(MonetDBLite())
 # dbWriteTable(con, "nhane", nhane)
 # nhane.db = tbl(con, "nhane")
-# nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane.db)
+# nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane.db)
 }
 \seealso{
 \code{\link{svydbdesign}}

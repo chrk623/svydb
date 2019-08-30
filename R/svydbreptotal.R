@@ -9,11 +9,11 @@
 #' @examples
 #' data(ss16hde)
 #' hde.dbrepsurv = svydbrepdesign(wt = WGTP, repwt="wgtp[0-9]+", scale = 4/80, data = ss16hde)
-#' svydbreptotal(x = BATH, design = hde.dbrepsurv , num = T)
-#' svydbreptotal(x = FS, design = hde.dbrepsurv , num = F)
-#' svydbreptotal(x = HHT, design = hde.dbrepsurv , num = T, return.replicates = T)$replicates
-#' coef(svydbreptotal(x = BATH, design = hde.dbrepsurv , num = T))
-#' SE(svydbreptotal(x = BATH, design = hde.dbrepsurv , num = T))
+#' svydbreptotal(x = BATH, design = hde.dbrepsurv, num = T)
+#' svydbreptotal(x = FS, design = hde.dbrepsurv, num = F)
+#' svydbreptotal(x = HHT, design = hde.dbrepsurv, num = T, return.replicates = T)$replicates
+#' coef(svydbreptotal(x = BATH, design = hde.dbrepsurv, num = T))
+#' SE(svydbreptotal(x = BATH, design = hde.dbrepsurv, num = T))
 #' # OR with a database connection
 #' # library(MonetDBLite)
 #' # library(DBI)

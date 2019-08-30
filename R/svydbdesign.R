@@ -163,7 +163,7 @@ makesvydbdesign <- R6Class("svydb.design",
 #' into a design.
 #' @examples
 #' data(nhane)
-#' nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
+#' nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane)
 #' nh.dbsurv$subset(Race3 == 3)
 #' nh.dbsurv$getmh()
 #' nh.dbsurv$getwt()

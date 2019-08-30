@@ -10,9 +10,9 @@
 #' \code{\link{svydbmean}}.
 #' @examples
 #' data(nhane)
-#' nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
-#' svydbby(x = Age , by = Gender , FUN = svydbmean ,design = nh.dbsurv , num = T)
-#' svydbby(x = BMI , by = Race3, FUN = svydbtotal ,design = nh.dbsurv , num = T)
+#' nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane)
+#' svydbby(x = Age, by = Gender, FUN = svydbmean, design = nh.dbsurv, num = T)
+#' svydbby(x = BMI, by = Race3, FUN = svydbtotal, design = nh.dbsurv, num = T)
 #' # OR with a database connection
 #' # library(MonetDBLite)
 #' # library(DBI)
@@ -20,7 +20,7 @@
 #' # con = dbConnect(MonetDBLite())
 #' # dbWriteTable(con, "nhane", nhane)
 #' # nhane.db = tbl(con, "nhane")
-#' # nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane.db)
+#' # nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane.db)
 #' @author Charco Hui
 #' @seealso
 #' \code{\link{svydbdesign}}, \code{\link{svydbtotal}}, \code{\link{svydbmean}}
