@@ -7,8 +7,8 @@
 #' @examples
 #' data(nhane)
 #' nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane)
-#' svydblm(DirectChol ~ Age + BMI + factor(Gender),design = nh.dbsurv)
-#' svydblm(DirectChol ~ Age + BMI,design = nh.dbsurv$subset(Race3 == 3))
+#' svydblm(DirectChol ~ Age + BMI + factor(Gender), design = nh.dbsurv)
+#' svydblm(DirectChol ~ Age + BMI, design = nh.dbsurv$subset(Race3 == 3))
 #' coef(svydblm(DirectChol ~ Age + BMI, design = nh.dbsurv))
 #' SE(svydblm(DirectChol ~ Age + BMI, design = nh.dbsurv))
 #' vcov(svydblm(DirectChol ~ Age + BMI, design = nh.dbsurv))
