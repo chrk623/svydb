@@ -10,11 +10,11 @@ svydbboxplot(x, groups = NULL, design, varwidth = F, outlier = F,
 \arguments{
 \item{x}{Name indicating the variable.}
 
-\item{groups}{Ifgroupsis defined, boxes of x will be split bygroups.}
+\item{groups}{If groups is defined, boxes of x will be split bygroups.}
 
 \item{design}{\code{svydb.design} object.}
 
-\item{varwidth}{if \code{varwidth = T},  the  width of the boxes are proportional
+\item{varwidth}{if \code{varwidth = T}, the width of the boxes are proportional
 to the number of observations in that box.}
 
 \item{outlier}{if \code{outlier = T}, observations outside of the 1.5 * IQR will be

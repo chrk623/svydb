@@ -1,9 +1,9 @@
 #' Boxplot
 #'
 #' @param x Name indicating the variable.
-#' @param groups  Ifgroupsis defined, boxes of x will be split bygroups.
+#' @param groups  If groups is defined, boxes of x will be split bygroups.
 #' @param design \code{svydb.design} object.
-#' @param varwidth  if \code{varwidth = T},  the  width of the boxes are proportional
+#' @param varwidth  if \code{varwidth = T}, the width of the boxes are proportional
 #' to the number of observations in that box.
 #' @param outlier if \code{outlier = T}, observations outside of the 1.5 * IQR will be
 #' plotted as points.
