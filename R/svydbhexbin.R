@@ -68,8 +68,8 @@ svydbhbin = function(xy, x, y, xName, yName, cell, cnt, xcm, ycm, size, shape, r
 #' Computes the co-ordinates and the necessary information to plot the hexagons.
 #' @examples
 #' data(nhane)
-#' nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane)
-#' hb = svydbhexbin(Height~Weight , design = nh.dbsurv)
+#' nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane)
+#' hb = svydbhexbin(Height ~ Weight, design = nh.dbsurv)
 #' svydbhexplot(hb)
 #' # OR with a database connection
 #' # library(MonetDBLite)
@@ -78,7 +78,7 @@ svydbhbin = function(xy, x, y, xName, yName, cell, cnt, xcm, ycm, size, shape, r
 #' # con = dbConnect(MonetDBLite())
 #' # dbWriteTable(con, "nhane", nhane)
 #' # nhane.db = tbl(con, "nhane")
-#' # nh.dbsurv = svydbdesign(st = SDMVSTRA , wt = WTMEC2YR,id = SDMVPSU , data = nhane.db)
+#' # nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane.db)
 #' @author Charco Hui
 #' @seealso
 #' \code{\link{svydbdesign}}, \code{\link{svydbhexplot}}
