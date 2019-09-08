@@ -49,7 +49,7 @@ svydbmean = function(x, num, design, return.mean = F,
 
     dsn$storename("x", colnames(d))
     N = dsn$getwt()
-    meanTbl = d %>% transmute_at(vars(dsn$names$x), funs((. * !!sym(dsn$wt))/!!quo(N))) %>% summarise_all(sum) %>%
+    meanTbl = d %>% transmute_at(vars(dsn$names$x), funs((. * !!sym(dsn$wt))/!!quo(N))) %>% summarise_all(sum, na.rm = T) %>%
         compute(temporary = T) %>% collect()
 
     if (return.mean == TRUE) {
@@ -64,12 +64,12 @@ svydbmean = function(x, num, design, return.mean = F,
     varTbl = varTbl %>% mutate_at(vars(dsn$names$dhi), funs((. * !!sym(dsn$wt))/!!quo(N))) %>% select(dsn$st, dsn$id,
         dsn$names$dhi)
 
-    barTbl = varTbl %>% select(dsn$st, dsn$names$dhi) %>% group_by(!!sym(dsn$st)) %>% summarise_all(sum)
+    barTbl = varTbl %>% select(dsn$st, dsn$names$dhi) %>% group_by(!!sym(dsn$st)) %>% summarise_all(sum, na.rm = T)
     barTbl = inner_join(barTbl, dsn$getmh(), by = dsn$st) %>% mutate_at(vars(dsn$names$dhi), funs(bar = ./m_h)) %>%
         select(-one_of(dsn$names$dhi))
     dsn$storename("bar", colnames(barTbl))
 
-    varTbl = varTbl %>% group_by(!!!syms(c(dsn$st, dsn$id))) %>% summarise_all(sum) %>% compute(temporary = T)
+    varTbl = varTbl %>% group_by(!!!syms(c(dsn$st, dsn$id))) %>% summarise_all(sum, na.rm = T) %>% compute(temporary = T)
     varTbl = inner_join(varTbl, barTbl, by = dsn$st)
 
     `dhi-dbar` = paste("`", dsn$names$dhi, "`", "-", "`", dsn$names$bar, "`", collapse = " ; ", sep = "")
