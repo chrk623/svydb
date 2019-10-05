@@ -1,6 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+## svydb - Survey statistics in a database
+
   - [Introduction](#intro)
   - [Installation](#installation)
   - [Examples](#examples)
