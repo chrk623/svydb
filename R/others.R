@@ -1,6 +1,6 @@
 dbmin = function(data, var, asNum = T) {
     var = enquo(var)
-    data = data %>% ungroup() %>% select(!!var) %>% summarise(min = min(!!var))
+    data = data %>% ungroup() %>% select(!!var) %>% summarise(min = min(!!var, na.rm = T))
     if (asNum == T) {
         data %>% pull
     } else {
@@ -10,7 +10,7 @@ dbmin = function(data, var, asNum = T) {
 
 dbmax = function(data, var, asNum = T) {
     var = enquo(var)
-    data = data %>% ungroup() %>% select(!!var) %>% summarise(max = max(!!var))
+    data = data %>% ungroup() %>% select(!!var) %>% summarise(max = max(!!var, na.rm = T))
     if (asNum == T) {
         data %>% pull
     } else {
