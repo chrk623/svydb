@@ -9,7 +9,7 @@
 #' @examples
 #' data(nhane)
 #' nh.dbsurv = svydbdesign(st = SDMVSTRA, wt = WTMEC2YR, id = SDMVPSU, data = nhane)
-#' svydbtotal(x = DirectChol, design = nh.dbsurv, num = T)
+#' svydbtotal(x = DirectChol, design = nh.dbsurv, num = T, na.rm = TRUE)
 #' svydbtotal(x = Race3, design = nh.dbsurv, num = F)
 #' svydbtotal(x = DirectChol, design = nh.dbsurv, num = T, return.total = T)
 #' coef(svydbtotal(x = DirectChol, design = nh.dbsurv, num = T))
@@ -51,7 +51,9 @@ svydbtotal = function(x, num, design, return.total = F,
     dsn$storename("x", colnames(d))
     d = d %>% mutate_at(vars(dsn$names$x), funs((. * !!sym(dsn$wt)))) %>% compute(temporary = T)
 
-    totTbl = d %>% select(dsn$names$x) %>% summarise_all(sum) %>% collect() %>% t()
+    # totTbl = d %>% select(dsn$names$x) %>% summarise_all(sum, rm.na = na.rm) %>% collect() %>% t()
+    totTbl = d %>% select(dsn$names$x) %>% summarise(across(everything(), sum, na.rm = T)) %>%
+      collect() %>% t()
 
     if (return.total == TRUE) {
         colnames(totTbl) = "Total"
@@ -59,7 +61,7 @@ svydbtotal = function(x, num, design, return.total = F,
     }
 
     varTbl = d %>% select(dsn$st, dsn$id, dsn$names$x) %>% group_by(!!!syms(c(dsn$st, dsn$id))) %>% summarise_at(vars(dsn$names$x),
-        funs(sum(.))) %>% compute(temporary = T)
+        funs(sum(., na.rm = T))) %>% compute(temporary = T)
     varTbl = inner_join(varTbl, dsn$getmh(), by = dsn$st)
 
     barTbl = varTbl %>% select(-one_of(dsn$id)) %>% group_by(!!sym(dsn$st)) %>% summarise_at(vars(dsn$names$x), funs(bar = sum(./m_h)))

@@ -39,7 +39,8 @@ svydbrepmean = function(x, design, num, return.replicates = F){
   }
 
   dsn = design$clone()
-  dsn$setx(!!enquo(x))
+  # dsn$setx(!!enquo(x))
+  dsn$setx(enquo(x))
 
   d = dsn$data
 
@@ -52,38 +53,87 @@ svydbrepmean = function(x, design, num, return.replicates = F){
   dsn$storename("x", colnames(d))
 
   N = dsn$getwt()
-  fullMeanTbl = d %>% summarise_at(vars(dsn$names$x),
-                                   funs(sum(. * (!!sym(dsn$wt)))/!!quo(N))) %>%
+  # fullMeanTbl = d %>% summarise_at(vars(dsn$names$x),
+  #                                  funs(sum(. * (!!sym(dsn$wt)))/!!quo(N), na.rm = TRUE)) %>%
+  #   collect()
+  fullMeanTbl = d %>%
+    summarise_at(
+      vars(dsn$names$x),
+      list(~ sum(. * (!!sym(dsn$wt)), na.rm = T) / !!quo(N))
+    ) %>%
     collect()
 
   repN = d %>% select(dsn$repwt) %>% summarise_all(sum) %>% collect()
   repN = paste(colnames(repN), "/", repN, collapse = " ; ")
   cnt = 1
-  getRepTots = function(names, fullMean){
-    replicates = d %>%
-      summarise_at(vars(dsn$repwt), funs(sum(. * !!sym(names)))) %>%
-      transmute(!!!parse_exprs(repN)) %>% compute()
-    # repMean = replicates %>%
-    #   summarise_all(funs((. - !!quo(fullMean[cnt]))^2))
-    repMean = replicates %>%
-      summarise_all(funs((. - local(fullMean[cnt]))^2))
+
+  # getRepTots = function(names, fullMean){
+  #   replicates = d %>%
+  #     summarise_at(vars(dsn$repwt), funs(sum(. * !!sym(names)))) %>%
+  #     transmute(!!!parse_exprs(repN)) %>% compute()
+  #   # repMean = replicates %>%
+  #   #   summarise_all(funs((. - !!quo(fullMean[cnt]))^2))
+  #   repMean = replicates %>%
+  #     summarise_all(funs((. - local(fullMean[cnt]))^2))
+  #   cnt <<- cnt + 1
+  #   if(return.replicates == T){
+  #     # list(replicates = replicates,
+  #     #      repVar = db_rowSums(repMean) %>%
+  #     #        transmute_all(funs(. * !!quo(dsn$scale))) %>% collect())
+  #     list(replicates = replicates,
+  #          repVar = db_rowSums(repMean) %>%
+  #            transmute_all(funs(. * local(dsn$scale))) %>% collect())
+  #   }else{
+  #     # list(repVar = db_rowSums(repMean) %>%
+  #     #        transmute_all(funs(. * !!quo(dsn$scale))) %>% collect())
+  #     list(repVar = db_rowSums(repMean) %>%
+  #            transmute_all(funs(. * local(dsn$scale))) %>% collect())
+  #   }
+  # }
+
+  getRepTots <- function(names, fullMean) {
+    replicates <- d %>%
+      summarise(across(
+        .cols = all_of(dsn$repwt),
+        .fns = ~ sum(. * !!sym(names), na.rm = TRUE)
+      )) %>%
+      transmute(!!!parse_exprs(repN)) %>%
+      compute()
+
+    repMean <- replicates %>%
+      summarise(across(
+        everything(),
+        ~ (. - local(fullMean[cnt]))^2
+      ))
+
     cnt <<- cnt + 1
-    if(return.replicates == T){
-      # list(replicates = replicates,
-      #      repVar = db_rowSums(repMean) %>%
-      #        transmute_all(funs(. * !!quo(dsn$scale))) %>% collect())
-      list(replicates = replicates,
-           repVar = db_rowSums(repMean) %>%
-             transmute_all(funs(. * local(dsn$scale))) %>% collect())
-    }else{
-      # list(repVar = db_rowSums(repMean) %>%
-      #        transmute_all(funs(. * !!quo(dsn$scale))) %>% collect())
-      list(repVar = db_rowSums(repMean) %>%
-             transmute_all(funs(. * local(dsn$scale))) %>% collect())
+
+    if (return.replicates == TRUE) {
+      list(
+        replicates = replicates,
+        repVar = db_rowSums(repMean) %>%
+          transmute(across(
+            everything(),
+            ~ . * local(dsn$scale)
+          )) %>%
+          collect()
+      )
+    } else {
+      list(
+        repVar = db_rowSums(repMean) %>%
+          transmute(across(
+            everything(),
+            ~ . * local(dsn$scale)
+          )) %>%
+          collect()
+      )
     }
   }
-  ans = lapply(colnames(fullMeanTbl), getRepTots, fullMean = as.vector(t(fullMeanTbl)))
-  repVar = lapply(ans, function(x) x$repVar) %>% Reduce(rbind, .) %>% pull()
+
+  ans <- lapply(colnames(fullMeanTbl), getRepTots, fullMean = as.vector(t(fullMeanTbl)))
+  repVar <- lapply(ans, function(x) x$repVar) %>%
+    Reduce(rbind, .) %>%
+    pull()
 
   means = fullMeanTbl %>% t() %>% as.vector()
   attr(means, "var") = repVar

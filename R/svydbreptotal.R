@@ -39,7 +39,8 @@ svydbreptotal = function(x, design, num, return.replicates = F){
   }
 
   dsn = design$clone()
-  dsn$setx(!!enquo(x))
+  # dsn$setx(!!enquo(x))
+  dsn$setx(enquo(x))
 
   d = dsn$data
 
@@ -51,24 +52,66 @@ svydbreptotal = function(x, design, num, return.replicates = F){
 
   dsn$storename("x", colnames(d))
 
-  fullTotTbl = d %>% summarise_at(vars(dsn$names$x),
-                                  funs(sum(. * (!!sym(dsn$wt))))) %>%
+  # fullTotTbl = d %>% summarise_at(vars(dsn$names$x),
+  #                                 funs(sum(. * (!!sym(dsn$wt))))) %>%
+  #   collect()
+  fullTotTbl = d %>%
+    summarise_at(
+      vars(dsn$names$x),
+      list(~ sum(. * (!!sym(dsn$wt)), na.rm = T))
+    ) %>%
     collect()
 
   cnt = 1
-  getRepTots = function(names, fullTot){
-    replicates = d %>% summarise_at(vars(dsn$repwt), funs(sum((. * !!sym(names))))) %>%
+  # getRepTots = function(names, fullTot){
+  #   replicates = d %>% summarise_at(vars(dsn$repwt), funs(sum((. * !!sym(names))))) %>%
+  #     collect()
+  #   repTot = replicates %>%
+  #     summarise_all(funs((. - !!quo(fullTot[cnt]))^2))
+  #   cnt <<- cnt + 1
+  #   if(return.replicates == T){
+  #     list(replicates = replicates,
+  #          repVar = db_rowSums(repTot) %>%
+  #            transmute_all(funs(. * !!quo(dsn$scale))) %>% collect())
+  #   }else{
+  #     list(repVar = db_rowSums(repTot) %>%
+  #            transmute_all(funs(. * !!quo(dsn$scale))) %>% collect())
+  #   }
+  # }
+  getRepTots <- function(names, fullTot) {
+    replicates <- d %>%
+      summarise(across(
+        .cols = all_of(dsn$repwt),
+        .fns = ~ sum(. * !!sym(names), na.rm = TRUE)
+      )) %>%
       collect()
-    repTot = replicates %>%
-      summarise_all(funs((. - !!quo(fullTot[cnt]))^2))
+
+    repTot <- replicates %>%
+      summarise(across(
+        everything(),
+        ~ (. - local(fullTot[cnt]))^2
+      ))
+
     cnt <<- cnt + 1
-    if(return.replicates == T){
-      list(replicates = replicates,
-           repVar = db_rowSums(repTot) %>%
-             transmute_all(funs(. * !!quo(dsn$scale))) %>% collect())
-    }else{
-      list(repVar = db_rowSums(repTot) %>%
-             transmute_all(funs(. * !!quo(dsn$scale))) %>% collect())
+    if (return.replicates == TRUE) {
+      list(
+        replicates = replicates,
+        repVar = db_rowSums(repTot) %>%
+          transmute(across(
+            everything(),
+            ~ . * local(dsn$scale)
+          )) %>%
+          collect()
+      )
+    } else {
+      list(
+        repVar = db_rowSums(repTot) %>%
+          transmute(across(
+            everything(),
+            ~ . * local(dsn$scale)
+          )) %>%
+          collect()
+      )
     }
   }
 
