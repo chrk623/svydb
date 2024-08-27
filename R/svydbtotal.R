@@ -39,7 +39,9 @@ svydbtotal = function(x, num, design, return.total = F,
     }
 
     dsn = design$clone()
-    dsn$setx(!!enquo(x))
+    # dsn$setx(!!enquo(x))
+    dsn$setx(enquo(x))
+
     d = dsn$data
     dsn$storename("x", colnames(d))
 

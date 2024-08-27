@@ -36,7 +36,9 @@ svydbboxplot = function(x, groups = NULL, design, varwidth = F, outlier = F, all
 
     groups = enquo(groups)
     dsn = design$clone()
-    dsn$setx(!!enquo(x))
+    # dsn$setx(!!enquo(x))
+    dsn$setx(enquo(x))
+
     d = dsn$data
     dsn$storename("x", colnames(d))
 

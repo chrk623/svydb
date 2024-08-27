@@ -28,7 +28,9 @@ svydbquantile = function(x, quantiles = 0.5, design) {
     options(survey.lonely.psu = "adjust")
 
     dsn = design$clone()
-    dsn$setx(!!enquo(x))
+    # dsn$setx(!!enquo(x))
+    dsn$setx(enquo(x))
+
     d = dsn$data
     dsn$storename("x", colnames(d))
 
@@ -63,8 +65,10 @@ svydbquantile = function(x, quantiles = 0.5, design) {
             while (notfound) {
                 q = svyquantile(~x, s.surv, quantiles[i], alpha = 0.1, ci = TRUE, na.rm = T)
 
-                temp_lq = q$CIs[1]
-                temp_uq = q$CIs[2]
+                # temp_lq = q$CIs[1]
+                # temp_uq = q$CIs[2]
+                temp_lq = q$x[1]
+                temp_uq = q$x[2]
 
                 readIn = d %>% select(x = dsn$names$x, wt = dsn$wt) %>% filter(x >= temp_lq & x <= temp_uq)
                 readIn_wts = readIn %>% select(wt) %>% summarise(sum(wt)) %>% pull()

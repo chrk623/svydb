@@ -33,7 +33,9 @@ svydbhist = function(x, design, binwidth = NULL, xlab = "x", ylab = "Density", .
     }
 
     dsn = design$clone()
-    dsn$setx(!!enquo(x))
+    # dsn$setx(!!enquo(x))
+    dsn$setx(enquo(x))
+
     d = dsn$data
     dsn$storename("x", colnames(d))
     d_n = d %>% db_nrow()
